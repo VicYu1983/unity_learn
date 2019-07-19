@@ -7,7 +7,7 @@ public class BlobParams : MonoBehaviour {
 
     public RectTransform[] points;
     public float blobSize = 1;
-	Material blobmat;
+	public Material blobmat;
 
 	void Start () {
 		blobmat = GetComponent<Image> ().material;
@@ -38,4 +38,6 @@ public class BlobParams : MonoBehaviour {
         blobmat.SetVectorArray ("_point_pos", blobs);
         blobmat.SetInt("_count", blobs.Length);
     }
+
+    
 }

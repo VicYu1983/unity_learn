@@ -14,10 +14,27 @@ public class BlobFactory : MonoBehaviour
 
     public float rate = .3f;
     public float blobSize = .5f;
+    public float seperate = 4f;
+    public Color waterColor = new Color(0.3f, 0.5f, 0.8f);
 
     private int maxCount = 30;
     private GameObject wall;
     private GameObject[] blobs;
+
+    public void Clear()
+    {
+        foreach(GameObject blob in blobs)
+        {
+            blob.GetComponent<RectTransform>().localPosition = new Vector3(int.MaxValue, 0, 0);
+            blob.GetComponent<Rigidbody2D>().Sleep();
+        }
+    }
+
+    public void ReStart()
+    {
+        Clear();
+        StartCoroutine(StartToBlob());
+    }
 
     void Start()
     {
@@ -32,6 +49,8 @@ public class BlobFactory : MonoBehaviour
         wall = Instantiate(prefabWall, blobRigidLayer.transform);
         blobEffectLayer.blobSize = blobSize;
         StartCoroutine(StartToBlob());
+
+        blobEffectLayer.blobmat.SetVector("_waterColor", new Vector4(waterColor.r, waterColor.g, waterColor.b, 1));
     }
     
     void Update()
@@ -43,7 +62,8 @@ public class BlobFactory : MonoBehaviour
     {
         for (var i = 0; i < blobs.Length; ++i)
         {
-            blobs[i].GetComponent<RectTransform>().localPosition = transformInput.localPosition;
+            Vector3 offsetPosition = transformInput.localPosition + new Vector3(Random.Range(-seperate, seperate), Random.Range(-seperate, seperate), 0);
+            blobs[i].GetComponent<RectTransform>().localPosition = offsetPosition;
             yield return new WaitForSeconds(rate);
         }
     }
