@@ -22,6 +22,8 @@ public class BlobFactory : MonoBehaviour
     private BlobRigid blobRigidLayer;
     private BlobParams blobEffectLayer;
 
+    private bool keepOut = true;
+
     public void Clear()
     {
         foreach(GameObject blob in blobs)
@@ -34,7 +36,18 @@ public class BlobFactory : MonoBehaviour
     public void ReStart()
     {
         Clear();
+        TurnOn();
         StartCoroutine(StartToBlob());
+    }
+
+    public void TurnOff()
+    {
+        keepOut = false;
+    }
+
+    public void TurnOn()
+    {
+        keepOut = true;
     }
 
     void Awake()
@@ -85,8 +98,11 @@ public class BlobFactory : MonoBehaviour
     {
         for (var i = 0; i < blobs.Length; ++i)
         {
-            Vector3 offsetPosition = transformInput.localPosition + new Vector3(UnityEngine.Random.Range(-seperate, seperate), UnityEngine.Random.Range(-seperate, seperate), 0);
-            blobs[i].GetComponent<RectTransform>().localPosition = offsetPosition;
+            if (keepOut)
+            {
+                Vector3 offsetPosition = transformInput.localPosition + new Vector3(UnityEngine.Random.Range(-seperate, seperate), UnityEngine.Random.Range(-seperate, seperate), 0);
+                blobs[i].GetComponent<RectTransform>().localPosition = offsetPosition;
+            }
             yield return new WaitForSeconds(rate);
         }
     }

@@ -1,9 +1,9 @@
 Shader "Custom/BlobShader" {
 	Properties{
-		_scale("scale", Range(0, 20000)) = 10000
-		_inner("inner", Range(0, 1)) = .7
+		_scale("scale", Range(0, 20000)) = 13000
+		_inner("inner", Range(0, 1)) = .5
 		_outter("outter", Range(0, 1)) = .1
-		_shape("blob shape", Range(0, 10)) = 8
+		_shape("blob shape", Range(0, 10)) = 9
 		_fadeEdge("blob edge", Range(0, 1)) = .95
 		_waterColor("water color", Color) = (0.3,0.5,0.8)
     }

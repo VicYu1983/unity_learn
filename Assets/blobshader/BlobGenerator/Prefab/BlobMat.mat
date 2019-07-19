@@ -73,10 +73,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _fadeEdge: 0.95
-    - _inner: 0.7
+    - _inner: 0.5
     - _node_3635: 0.383
     - _outter: 0.1
-    - _scale: 10000
+    - _scale: 13000
     - _shape: 9
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
