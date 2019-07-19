@@ -51,7 +51,7 @@ Shader "Custom/BlobShader" {
                 o.uv = v.uv;
 
 				// 解決比例問題，防止變形
-				o.extra.x = _ScreenParams.x / _ScreenParams.y;;
+				o.extra.x = _ScreenParams.x / _ScreenParams.y;
 				o.uv.x *= o.extra.x;
 
                 o.pos = UnityObjectToClipPos( v.vertex );
