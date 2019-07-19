@@ -1,15 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BlobFactory : MonoBehaviour
 {
-    public BlobRigid blobRigidLayer;
-    public BlobParams blobEffectLayer;
-
     public GameObject prefabBlob;
-    public GameObject prefabWall;
-    public RectTransform transformWall;
+    public GameObject prefabCup;
+    public RectTransform transformCup;
     public RectTransform transformInput;
 
     public float rate = .3f;
@@ -18,8 +16,11 @@ public class BlobFactory : MonoBehaviour
     public Color waterColor = new Color(0.3f, 0.5f, 0.8f);
 
     private int maxCount = 30;
-    private GameObject wall;
+    private GameObject cup;
     private GameObject[] blobs;
+
+    private BlobRigid blobRigidLayer;
+    private BlobParams blobEffectLayer;
 
     public void Clear()
     {
@@ -36,6 +37,28 @@ public class BlobFactory : MonoBehaviour
         StartCoroutine(StartToBlob());
     }
 
+    void Awake()
+    {
+        if( prefabCup == null )
+        {
+            throw new Exception("請輸入prefabCup參數!");
+        }
+        if( prefabBlob == null )
+        {
+            throw new Exception("請輸入prefabBlob參數!");
+        }
+        if (transformCup == null )
+        {
+            throw new Exception("請輸入transformCup參數!");
+        }
+        if(transformInput == null)
+        {
+            throw new Exception("請輸入transformInput參數!");
+        }
+        blobRigidLayer = GetComponentInChildren<BlobRigid>();
+        blobEffectLayer = GetComponentInChildren<BlobParams>();
+    }
+
     void Start()
     {
         blobs = new GameObject[maxCount];
@@ -46,7 +69,7 @@ public class BlobFactory : MonoBehaviour
             blobs[i].GetComponent<RectTransform>().localScale = new Vector3(blobSize, blobSize, 1);
             blobEffectLayer.points[i] = blobs[i].GetComponent<RectTransform>();
         }
-        wall = Instantiate(prefabWall, blobRigidLayer.transform);
+        cup = Instantiate(prefabCup, blobRigidLayer.transform);
         blobEffectLayer.blobSize = blobSize;
         StartCoroutine(StartToBlob());
 
@@ -55,14 +78,14 @@ public class BlobFactory : MonoBehaviour
     
     void Update()
     {
-        wall.GetComponent<RectTransform>().localPosition = transformWall.localPosition;
+        cup.GetComponent<RectTransform>().localPosition = transformCup.localPosition;
     }
-
+    
     IEnumerator StartToBlob()
     {
         for (var i = 0; i < blobs.Length; ++i)
         {
-            Vector3 offsetPosition = transformInput.localPosition + new Vector3(Random.Range(-seperate, seperate), Random.Range(-seperate, seperate), 0);
+            Vector3 offsetPosition = transformInput.localPosition + new Vector3(UnityEngine.Random.Range(-seperate, seperate), UnityEngine.Random.Range(-seperate, seperate), 0);
             blobs[i].GetComponent<RectTransform>().localPosition = offsetPosition;
             yield return new WaitForSeconds(rate);
         }
