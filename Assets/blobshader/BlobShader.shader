@@ -4,6 +4,7 @@ Shader "Custom/BlobShader" {
 		_outter("outter", Range(0, 1)) = .0001
 		_shape("blob shape", Range(0, 10)) = 1
 		_fadeEdge("blob edge", Range(0, 1)) = .1
+		_waterColor("water color", Color) = (0.3,0.5,0.8)
     }
     SubShader {
         Tags {
@@ -30,6 +31,7 @@ Shader "Custom/BlobShader" {
 			uniform float _shape;
 			uniform float _fadeEdge;
 			uniform int _count;
+			uniform float3 _waterColor;
 
             struct VertexInput {
                 float4 vertex : POSITION;
@@ -39,11 +41,17 @@ Shader "Custom/BlobShader" {
             struct VertexOutput {
                 float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
+				float2 extra: TEXCOORD1;
             };
 
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
                 o.uv = v.uv;
+
+				// 解決比例問題，防止變形
+				o.extra.x = _ScreenParams.x / _ScreenParams.y;;
+				o.uv.x *= o.extra.x;
+
                 o.pos = UnityObjectToClipPos( v.vertex );
                 return o;
             }
@@ -60,7 +68,12 @@ Shader "Custom/BlobShader" {
             	float2 uv = i.uv;
             	float4 color_pos = float4(0,0,0,1);
             	for( int j = 0; j < _count; ++j ){
-            		float dis = length((float2(uv)-_point_pos[j].xy));
+
+					// 解決比例問題，防止變形。簡單來説就是依照畫面的uv的x軸縮放比例，把傳進來的水滴位置坐標的x軸也等比例縮放就行
+					float2 offsetPos = _point_pos[j];
+					offsetPos.x *= i.extra.x;
+
+            		float dis = length((float2(uv)-offsetPos));
             		float col = clamp(.5-dis, 0, 1);
 					col = pow(col, _shape);
             		color_pos += float4( col, col, col, 1 );
@@ -89,7 +102,7 @@ Shader "Custom/BlobShader" {
 				float wave5 = getLine( .2, .25, newuv.x / newuv.y );
 				float allwave = wave1 + wave2 + wave3 + wave4 + wave5;
 
-				float3 outcolor = lerp( float3(0.3,0.5,0.8), float3(1,1,1), allwave );
+				float3 outcolor = lerp(_waterColor, float3(1,1,1), allwave );
 				outcolor = lerp( float3(0.3,0.3,0.3), outcolor, shape );
 				outcolor += shape_inside / 1.5;
 

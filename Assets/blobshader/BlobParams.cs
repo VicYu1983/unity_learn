@@ -37,6 +37,5 @@ public class BlobParams : MonoBehaviour {
         Vector4[] blobs = getShaderVectorAry();
         blobmat.SetVectorArray ("_point_pos", blobs);
         blobmat.SetInt("_count", blobs.Length);
-        //blobmat.SetFloat("_shape", getShapeValue());
     }
 }
