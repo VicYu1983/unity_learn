@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3beec17e4ff68a34cb18cc8082dbd35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalAge: 1
+  totalAge: 0.6
   mat: {fileID: 2100000, guid: c7f1ab50dfeab8741890e8764d63423b, type: 2}
 --- !u!1 &1651626365
 GameObject:

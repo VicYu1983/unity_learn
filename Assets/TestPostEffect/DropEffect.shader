@@ -5,6 +5,7 @@
         _MainTex ("Texture", 2D) = "white" {}
 		_power("power", Range(0, .1)) = .01
 		_speed("speed", Range(1, 1000)) = 10
+		_size("size", Range(1, 10)) = 6
 		_distance("distance", Range(1, 100)) = 3
 	}
 	SubShader
@@ -21,6 +22,7 @@
 			#include "UnityCG.cginc"
 
 			float4 _dropPos;
+			float _size;
 			float _power;
 			float _speed;
 			int _distance;
@@ -58,7 +60,7 @@
 				newuv.x *= i.uv.z;
 
 				float pos_color = clamp(1 - length(newuv - i.dropPos), 0, 1);
-				float flowMap = sin(pos_color * _distance + _Time * _speed) * pow(pos_color, 6) * _power;
+				float flowMap = sin(pos_color * _distance + _Time * _speed) * pow(pos_color, _size) * _power;
 
 				flowMap *= _effect;
 
