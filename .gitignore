@@ -2,3 +2,8 @@ Library
 Logs
 Packages
 ProjectSettings
+.vs
+*.csproj
+*.sln
+obj/
+Temp/
