@@ -218,14 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0719f4f1d980884994a2a6157d6a25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blobRigidLayer: {fileID: 6367652652565384311}
-  blobEffectLayer: {fileID: 6367652652068344537}
   prefabBlob: {fileID: 1914249376310750, guid: 80e0b2df4547f436495b6e4b4e51a49c, type: 3}
-  prefabWall: {fileID: 3054833706379828952, guid: cb7a9e36c32949d40a21cae597879336,
+  prefabCup: {fileID: 3054833706379828952, guid: cb7a9e36c32949d40a21cae597879336,
     type: 3}
-  transformWall: {fileID: 0}
+  transformCup: {fileID: 0}
   transformInput: {fileID: 0}
   rate: 0.2
   blobSize: 0.5
   seperate: 4
-  waterColor: {r: 1, g: 0, b: 0.08150673, a: 1}
+  waterColor: {r: 0, g: 0.25933123, b: 1, a: 1}

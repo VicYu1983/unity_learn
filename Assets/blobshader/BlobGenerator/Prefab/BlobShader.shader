@@ -1,9 +1,10 @@
 Shader "Custom/BlobShader" {
 	Properties{
-		_inner("inner", Range(0, 1)) = .0001
-		_outter("outter", Range(0, 1)) = .0001
-		_shape("blob shape", Range(0, 10)) = 1
-		_fadeEdge("blob edge", Range(0, 1)) = .1
+		_scale("scale", Range(0, 20000)) = 10000
+		_inner("inner", Range(0, 1)) = .7
+		_outter("outter", Range(0, 1)) = .1
+		_shape("blob shape", Range(0, 10)) = 8
+		_fadeEdge("blob edge", Range(0, 1)) = .95
 		_waterColor("water color", Color) = (0.3,0.5,0.8)
     }
     SubShader {
@@ -26,6 +27,7 @@ Shader "Custom/BlobShader" {
 			#include "UnityCG.cginc"
 			
             uniform float4 _point_pos[30];
+            uniform float _scale;
             uniform float _inner;
             uniform float _outter;
 			uniform float _shape;
@@ -79,7 +81,10 @@ Shader "Custom/BlobShader" {
             		color_pos += float4( col, col, col, 1 );
             	}
 				color_pos /= _count;
-				color_pos *= 3;
+
+				_inner /= _scale;
+				_outter /= _scale;
+				_fadeEdge /= _scale;
 
             	float shape = smoothstep( _inner, _inner + _outter, color_pos.r );
 				if (shape <= 0) {
