@@ -60,6 +60,11 @@ UnityIndirect CreateIndirectLight(Interpolators i) {
 #if defined(VERTEXLIGHT_ON)
 	indirectLight.diffuse = i.vertexLightColor;
 #endif
+
+	indirectLight.diffuse += max(0, ShadeSH9(float4(i.normal, 1)));
+	float4 envSample = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, i.normal);
+	indirectLight.specular = DecodeHDR(envSample, unity_SpecCube0_HDR);
+
 	return indirectLight;
 }
 #endif
@@ -91,6 +96,6 @@ float4 frag(Interpolators i) :SV_TARGET {
 	float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
 	float3 halfVector = normalize(lightDir + viewDir);
 	float3 specular = specularTint * lightColor * pow(DotClamped(halfVector, i.normal), _Smoothness * 100);
-
+	
 	return UNITY_BRDF_PBS(albedo, specularTint, oneMinusReflectivity, _Smoothness, i.normal, viewDir, CreateLight(i), CreateIndirectLight(i));
 }

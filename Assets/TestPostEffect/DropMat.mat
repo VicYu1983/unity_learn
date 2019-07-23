@@ -72,9 +72,9 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _distance: 34
+    - _distance: 86
     - _power: 0.045
-    - _size: 1.88
+    - _size: 10
     - _speed: 641
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

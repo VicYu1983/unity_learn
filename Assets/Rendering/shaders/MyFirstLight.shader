@@ -92,6 +92,7 @@ Shader "Custom/My First Lighting Shader"
 			#if defined(VERTEXLIGHT_ON)
 				indirectLight.diffuse = i.vertexLightColor;
 			#endif
+
 				return indirectLight;
 			}
 
