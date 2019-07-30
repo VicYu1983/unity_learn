@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class DropEffect : MonoBehaviour
 {
-    public float totalAge = 1;
+    public float totalAge = 1.0f;
     public Material mat;
 
-    float currentAge;
-    Vector3 dropScreenPos;
+    List<float> currentAge;
+    List<float> currentEffect;
+    List<Vector4> dropScreenPos;
 
     void Awake()
     {
-        currentAge = totalAge;
+        currentAge = new List<float>();
+        currentEffect = new List<float>();
+        dropScreenPos = new List<Vector4>();
+
+        for(int i = 0; i < 5; ++i)
+        {
+            currentAge.Add(totalAge);
+            currentEffect.Add(0);
+            dropScreenPos.Add(new Vector4());
+        }
     }
 
     public void Trigger(Transform dropPos)
@@ -23,16 +33,23 @@ public class DropEffect : MonoBehaviour
 
     public void Trigger(Vector3 dropPos)
     {
-        dropScreenPos = dropPos;
-        currentAge = 0;
+        dropScreenPos.RemoveAt(0);
+        dropScreenPos.Add(dropPos);
+
+        currentAge.RemoveAt(0);
+        currentAge.Add(0);
     }
 
     void Update()
     {
-        currentAge += Time.deltaTime;
-        if(currentAge > totalAge)
+        for( var i = 0; i < currentAge.Count; ++i)
         {
-            currentAge = totalAge;
+            currentAge[i] += Time.deltaTime;
+            if (currentAge[i] > totalAge)
+            {
+                currentAge[i] = totalAge;
+            }
+            currentEffect[i] = 1.0f - (currentAge[i] / totalAge);
         }
     }
 
@@ -41,8 +58,8 @@ public class DropEffect : MonoBehaviour
         Graphics.Blit(src, dest, mat);
         if (dropScreenPos != null)
         {
-            mat.SetVector("_dropPos", dropScreenPos);
-            mat.SetFloat("_effect", 1 - (currentAge / totalAge));
+            mat.SetVectorArray("_dropPos", dropScreenPos);
+            mat.SetFloatArray("_effect", currentEffect);
         }
     }
 }

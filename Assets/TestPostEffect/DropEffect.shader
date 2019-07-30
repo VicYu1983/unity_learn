@@ -21,12 +21,12 @@
 
 			#include "UnityCG.cginc"
 
-			float4 _dropPos;
+			float4 _dropPos[5];
 			float _size;
 			float _power;
 			float _speed;
 			int _distance;
-			float _effect;
+			float _effect[5];
 
             struct appdata
             {
@@ -37,7 +37,7 @@
             struct v2f
             {
                 float3 uv : TEXCOORD0;
-				float4 dropPos: TEXCOORD1;
+				//float4 dropPos: TEXCOORD1;
                 float4 vertex : SV_POSITION;
             };
 
@@ -49,23 +49,28 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv.xy = v.uv;
 				o.uv.z = _ScreenParams.x / _ScreenParams.y;
-				o.dropPos = _dropPos;
-				o.dropPos.x *= o.uv.z;
+				//o.dropPos = _dropPos;
+				//o.dropPos.x *= o.uv.z;
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag (v2f v) : SV_Target
             {
-				float2 newuv = i.uv.xy;
-				newuv.x *= i.uv.z;
+				float2 newuv = v.uv.xy;
+				newuv.x *= v.uv.z;
 
-				float pos_color = clamp(1 - length(newuv - i.dropPos), 0, 1);
-				float flowMap = sin(pos_color * _distance + _Time * _speed) * pow(pos_color, _size) * _power;
+				float flowMapEffect = 0;
+				for (int i = 0; i < 5; ++i) {
+					float4 dropPos = _dropPos[i];
+					dropPos.x *= v.uv.z;
+					float pos_color = clamp(1 - length(newuv - dropPos), 0, 1);
+					float flowMap = sin(pos_color * _distance + _Time * _speed) * pow(pos_color, _size) * _power;
+					flowMap *= _effect[i];
+					flowMapEffect += flowMap;
+				}
 
-				flowMap *= _effect;
-
-				i.uv += flowMap;
-				fixed4 col = tex2D(_MainTex, i.uv);
+				v.uv += flowMapEffect;
+				fixed4 col = tex2D(_MainTex, v.uv);
 
 				return col;
             }
